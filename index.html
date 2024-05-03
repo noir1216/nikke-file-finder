@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nikke File Finder</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            table-layout: fixed;
+            width: auto;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 5px;
+            word-wrap: break-word;
+            max-width: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .table-container {
+            display: flex;
+        }
+
+        .table-container table {
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-button {
+            background-color: #ddd;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .checkbox-button.checked {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Nikke File Finder</h2>
+    <div style="display: flex; gap: 10px;">
+        <label for="fileInput">Upload File:</label>
+        <input type="file" id="fileInput" accept=".txt, .json" onchange="readFile(this)" style="width: 200px;">
+        <label for="folderInput">Upload Folder:</label>
+        <input type="file" id="folderInput" webkitdirectory directory multiple onchange="readFolder(this)" style="width: 200px;">
+    </div>
+    <br>
+    <div>
+        <textarea id="textArea" readonly rows="10" cols="120" oninput="updateSelectorState()">Upload File or Folder</textarea>
+    </div>
+    <label for="selector">Select Type:</label>
+    <select id="selector" disabled onchange="updateSelectorState()">
+        <option value="All">All</option>
+        <option value="Aim">Aim</option>
+        <option value="Cover">Cover</option>
+        <option value="Standing(Lobby)">Standing(Lobby)</option>
+        <option value="FullBody(Sprite)">FullBody(Sprite)</option>
+        <option value="Portrait">Portrait</option>
+        <option value="Burst(Lobby)">Burst(Lobby)</option>
+        <option value="Burst(InGame)">Burst(InGame)</option>
+        <option value="SD-Model">SD-Model</option>
+        <option value="Voice">Voice</option>
+        <option value="Voice(MaxBond)">Voice(MaxBond)</option>
+        <option value="Voice(Title)">Voice(Title)</option>
+        <option value="None" selected>None</option>
+    </select>
+
+    <button id="exportButton" onclick="exportTable()" disabled>Export Table</button>
+    <div>
+        <input type="checkbox" id="checkboxAim" disabled checked>
+        <label for="checkboxStanding">Aim</label>
+        <input type="checkbox" id="checkboxCover" disabled checked>
+        <label for="checkboxStanding">Cover</label>
+        <input type="checkbox" id="checkboxStanding(Lobby)" disabled checked>
+        <label for="checkboxStanding(Lobby)">Standing(Lobby)</label>
+        <input type="checkbox" id="checkboxFullBody(Sprite)" disabled checked>
+        <label for="checkboxFullBody(Sprite)">FullBody(Sprite)</label>
+        <input type="checkbox" id="checkboxPortrait" disabled checked>
+        <label for="checkboxPortrait">Portrait</label>
+        <input type="checkbox" id="checkboxBurst(Lobby)" disabled checked>
+        <label for="checkboxBurst(Lobby)">Burst(Lobby)</label>
+        <input type="checkbox" id="checkboxBurst(InGame)" disabled checked>
+        <label for="checkboxBurst(InGame)">Burst(InGame)</label>
+        <input type="checkbox" id="checkboxSD-Model" disabled checked>
+        <label for="checkboxSD-Model">SD-Model</label>
+        <input type="checkbox" id="checkboxVoice" disabled checked>
+        <label for="checkboxVoice">Voice</label>
+        <input type="checkbox" id="checkboxVoice(MaxBond)" disabled checked>
+        <label for="checkboxVoice(MaxBond)">Voice(MaxBond)</label>
+        <input type="checkbox" id="checkboxVoice(Title)" disabled checked>
+        <label for="checkboxVoice(Title)">Voice(Title)</label>
+    </div>
+    <br>
+    <div>
+        <label for="idFilter">Filter by ID:</label>
+        <input type="text" id="idFilter" placeholder="Enter ID">
+        <button onclick="applyFilter()">Apply Filter</button>
+        <button onclick="clearFilter()">Clear Filter</button>
+    </div>
+
+    <h3>Results:</h3>
+    <div class="table-container" id="resultContainer"></div>
+
+    <script>
+        const regexPatterns = {
+                Aim: /spinecombatcharactergroup\(hd\)_assets_spine\/combat\/(\w+)\/(\w+)\/aim_hd_(\w+)\.bundle/g,
+                Cover: /spinecombatcharactergroup\(hd\)_assets_spine\/combat\/(\w+)\/(\w+)\/cover_hd_(\w+)\.bundle/g,
+                'Standing(Lobby)': /spinestandingcharactergroup\(hd\)_assets_spine\/standing\/(\w+)\/(\w+)_hd_(\w+)\.bundle/g,
+                'FullBody(Sprite)': /icons-char-full\(hd\)_assets_(\w+)_(\w+)_(\w+)\.bundle/g,
+                Portrait: /icons-char-mi\(hd\)_assets_mi_(\w+)_(\w+)_s_(\w+)\.bundle/g,
+                'Burst(Lobby)': /livewallpaperprefabs_assets_livewallpaper\/eventscene_(\w+)_cutscene_(\w+)\.bundle/g,
+                'Burst(InGame)': /spotskillcutscene_assets_(\w+)_cut_scene_(\w+)\.bundle/g,
+                'SD-Model' : /sdcharacters_assets_(\w+)_(\w+)_var_(\w+)\.bundle/g,
+                Voice: /voice_required_pc_(\w+)_assets_all_(\w+)\.bundle/g,
+                'Voice(MaxBond)': /voice_add_pc_(\w+)_assets_all_(\w+)\.bundle/g,
+                'Voice(Title)': /voice_required_titlecall_assets_(\w+)_titlecall_1_(\w+)\.bundle/g,
+            };
+
+        function readFile(input) {
+            const file = input.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    let fileContent = e.target.result;
+                    const matchedStrings = [];
+                    for (const key in regexPatterns) {
+                        const regex = regexPatterns[key];
+                        let match;
+                        while ((match = regex.exec(fileContent)) !== null) {
+                            matchedStrings.push(match[0]);
+                        }
+                    }
+                    fileContent = matchedStrings.join('\n');
+                    document.getElementById("textArea").value = fileContent;
+                    updateSelectorState();
+                };
+
+                reader.readAsText(file);
+            }
+        }
+
+        function readFolder(input) {
+            const files = input.files;
+
+            if (files.length > 0) {
+                let combinedText = "";
+
+                for (const file of files) {
+                    if (file.name.toLowerCase().endsWith('.json')) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const fileContent = e.target.result;
+                            const matchedStrings = [];
+                            for (const key in regexPatterns) {
+                                const regex = regexPatterns[key];
+                                let match;
+                                while ((match = regex.exec(fileContent)) !== null) {
+                                    matchedStrings.push(match[0]);
+                                }
+                            }
+                            combinedText += matchedStrings.join('\n');
+                            document.getElementById("textArea").value = combinedText;
+                            updateSelectorState();
+                        };
+
+                        reader.readAsText(file);
+                    }
+                }
+            }
+        }
+
+        function applyFilter() {
+            const idFilter = document.getElementById("idFilter").value.trim().toLowerCase();
+            const resultTables = document.querySelectorAll(".table-container table");
+
+            resultTables.forEach(table => {
+                const tableBody = table.querySelector("tbody");
+                const rows = tableBody.querySelectorAll("tr");
+
+                rows.forEach(row => {
+                    const idColumn = row.querySelector("td:first-child");
+                    const idValue = idColumn.textContent.toLowerCase();
+
+                    if (idValue.includes(idFilter)) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            });
+        }
+
+        function clearFilter() {
+            const resultTables = document.querySelectorAll(".table-container table");
+
+            resultTables.forEach(table => {
+                const tableBody = table.querySelector("tbody");
+                const rows = tableBody.querySelectorAll("tr");
+
+                rows.forEach(row => {
+                    row.style.display = "";
+                });
+            });
+
+            document.getElementById("idFilter").value = "";
+        }
+
+        function exportTable() {
+            const selector = document.getElementById("selector").value;
+            const resultContainer = document.getElementById("resultContainer");
+            const resultTables = resultContainer.querySelectorAll("table");
+            const exportData = [["ID", "Ver", "Container"]];
+
+            resultTables.forEach(table => {
+                const rows = table.querySelectorAll("tbody tr");
+                rows.forEach(row => {
+                    const columns = row.querySelectorAll("td");
+                    const rowData = Array.from(columns).map(column => column.textContent);
+                    exportData.push(rowData);
+                });
+            });
+
+            const csvContent = exportData.map(row => row.join(",")).join("\n");
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const link = document.createElement("a");
+
+            link.href = URL.createObjectURL(blob);
+            link.download = `${selector}_Table.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function updateSelectorState() {
+            const textArea = document.getElementById("textArea");
+            const selector = document.getElementById("selector");
+            const exportButton = document.getElementById("exportButton");
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+            selector.disabled = textArea.value.trim() === "";
+            exportButton.disabled = selector.value === "None" || selector.value === "All";
+            checkboxes.forEach(checkbox => {
+                checkbox.disabled = selector.value != "All";
+            });
+            analyzeText();
+            updateTableVisibility();
+        }
+
+        function updateTableVisibility() {
+            const resultTables = document.querySelectorAll(".table-container table");
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+            resultTables.forEach((table, index) => {
+                const checkbox = checkboxes[index];
+
+                if (checkbox && !checkbox.checked) {
+                    table.style.display = "none";
+                } else {
+                    table.style.display = "";
+                }
+            });
+        }
+
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', updateTableVisibility);
+        });
+
+        function analyzeText() {
+            const text = document.getElementById("textArea").value;
+            const selector = document.getElementById("selector").value;
+            const resultContainer = document.getElementById("resultContainer");
+
+            if (selector === "All") {
+                resultContainer.innerHTML = "";
+
+                for (const key in regexPatterns) {
+                    const regex = regexPatterns[key];
+                    const resultTable = document.createElement("table");
+                    resultTable.innerHTML = `<thead><tr><th>ID</th><th>Ver</th><th>File</th></tr></thead><tbody></tbody>`;
+                    resultContainer.appendChild(resultTable);
+
+                    const resultBody = resultTable.querySelector("tbody");
+
+                    let matches;
+                    let rowsHtml = '';
+
+                    while ((matches = regex.exec(text)) !== null) {
+                        let tchar, char, variant, bundle;
+
+                        if (key === "Burst(Lobby)" || key === "Burst(InGame)" || key === "Voice" || key === "Voice(MaxBond)" || key === "Voice(Title)") {
+                            tchar = matches[1];
+                            char = getFirstPartOfChar(tchar);
+                            variant = getVariantFromChar(tchar);
+                            bundle = matches[2];
+                        } else {
+                            char = matches[1];
+                            variant = matches[2];
+                            bundle = matches[3];
+                        }
+                        rowsHtml += `<tr><td>${char}</td><td>${variant}</td><td>${bundle}</td></tr>`;
+                    }
+
+                    const sortedRows = rowsHtml.split('</tr>')
+                        .filter(row => row.trim() !== '')
+                        .sort((a, b) => {
+                            const aID = a.split('</td>')[0].split('<td>')[1];
+                            const bID = b.split('</td>')[0].split('<td>')[1];
+                            const aVer = a.split('</td>')[1].split('<td>')[1];
+                            const bVer = b.split('</td>')[1].split('<td>')[1];
+
+                            if (aID !== bID) {
+                                return aID.localeCompare(bID);
+                            } else {
+                                return aVer.localeCompare(bVer);
+                            }
+                        })
+                        .join('</tr>');
+
+                    resultBody.innerHTML = sortedRows;
+                    resultTable.innerHTML += `<caption>${key}</caption>`;
+                }
+            } else if (selector !== "None") {
+                const regex = regexPatterns[selector];
+                const resultTable = document.createElement("table");
+                resultTable.innerHTML = `<thead><tr><th>ID</th><th>Ver</th><th>File</th></tr></thead><tbody></tbody>`;
+                resultContainer.innerHTML = "";
+                resultContainer.appendChild(resultTable);
+
+                const resultBody = resultTable.querySelector("tbody");
+
+                let matches;
+                let rowsHtml = '';
+
+                while ((matches = regex.exec(text)) !== null) {
+                    let tchar, char, variant, bundle;
+
+                    if (selector === "Burst(Lobby)" || selector === "Burst(InGame)" || selector === "Voice" || selector === "Voice(MaxBond)" || selector === "Voice(Title)") {
+                        tchar = matches[1];
+                        char = getFirstPartOfChar(tchar);
+                        variant = getVariantFromChar(tchar);
+                        bundle = matches[2];
+                    } else {
+                        char = matches[1];
+                        variant = matches[2];
+                        bundle = matches[3];
+                    }
+                    rowsHtml += `<tr><td>${char}</td><td>${variant}</td><td>${bundle}</td></tr>`;
+                }
+
+                const sortedRows = rowsHtml.split('</tr>')
+                    .filter(row => row.trim() !== '')
+                    .sort((a, b) => {
+                        const aID = a.split('</td>')[0].split('<td>')[1];
+                        const bID = b.split('</td>')[0].split('<td>')[1];
+                        const aVer = a.split('</td>')[1].split('<td>')[1];
+                        const bVer = b.split('</td>')[1].split('<td>')[1];
+
+                        if (aID !== bID) {
+                            return aID.localeCompare(bID);
+                        } else {
+                            return aVer.localeCompare(bVer);
+                        }
+                    })
+                    .join('</tr>');
+
+                resultBody.innerHTML = sortedRows;
+                resultTable.innerHTML += `<caption>${selector}</caption>`;
+            } else {
+                resultContainer.innerHTML = "";
+            }
+            highlightRows();
+        }
+
+
+        function getVariantFromChar(tchar) {
+            return tchar.includes("_") ? tchar.split("_")[1] : "00";
+        }
+
+        function getFirstPartOfChar(tchar) {
+            const parts = tchar.split('_');
+            return parts.length > 0 ? parts[0] : tchar;
+        }
+
+        function highlightRows() {
+        const resultTables = document.querySelectorAll(".table-container table");
+
+        resultTables.forEach(table => {
+            const tableBody = table.querySelector("tbody");
+            const rows = tableBody.querySelectorAll("tr");
+
+            let idRowsMap = new Map();
+
+            rows.forEach(row => {
+                const firstColumn = row.querySelector("td:first-child");
+                const id = firstColumn.textContent.trim();
+
+                if (!idRowsMap.has(id)) {
+                    idRowsMap.set(id, []);
+                }
+
+                idRowsMap.get(id).push(row);
+            });
+
+            idRowsMap.forEach(idRows => {
+                let groupStarted = false;
+
+                idRows.forEach((row, index) => {
+                    const secondColumn = row.querySelector("td:nth-child(2)");
+                    const thirdColumn = row.querySelector("td:nth-child(3)");
+
+                    const isSecondColumnExceeded = secondColumn.textContent.length > 2;
+                    const isThirdColumnExceeded = thirdColumn.textContent.length > 32;
+
+                    if (!groupStarted) {
+                        row.style.borderTop = "2px solid black";
+                        groupStarted = true;
+                    } else {
+                        row.style.borderTop = "none";
+                    }
+
+                    if (isSecondColumnExceeded || isThirdColumnExceeded) {
+                        row.style.backgroundColor = "lightcoral";
+                    } else {
+                        row.style.backgroundColor = "";
+                    }
+
+                    const lastColumn = row.querySelector("td:last-child");
+                    lastColumn.style.borderRight = "2px solid black";
+
+                    row.querySelector("td:first-child").style.borderLeft = "2px solid black";
+                });
+
+                if (groupStarted) {
+                    const lastRow = idRows[idRows.length - 1];
+                    lastRow.style.borderBottom = "2px solid black";
+                    lastRow.querySelector("td:last-child").style.borderRight = "2px solid black";
+                }
+            });
+
+            const headerRow = table.querySelector("thead tr");
+            headerRow.style.borderTop = "2px solid black";
+            headerRow.style.borderBottom = "2px solid black";
+            headerRow.style.borderLeft = "2px solid black";
+            headerRow.querySelector("th:first-child").style.borderLeft = "2px solid black";
+            headerRow.querySelector("th:last-child").style.borderRight = "2px solid black";
+        });
+    }
+    </script>
+
+</body>
+
+</html>
