@@ -232,7 +232,7 @@ hr {
   .row > * {
     box-sizing: border-box; }
   .row.gtr-uniform > * > :last-child {
-    margin-bottom: 0; }
+    margin-bottom: 20; }
   .row.aln-left {
     justify-content: flex-start; }
   .row.aln-center {
@@ -358,7 +358,7 @@ hr {
       .row > * {
         box-sizing: border-box; }
       .row.gtr-uniform > * > :last-child {
-        margin-bottom: 0; }
+        margin-bottom: 20; }
       .row.aln-left {
         justify-content: flex-start; }
       .row.aln-center {
@@ -484,7 +484,7 @@ hr {
       .row > * {
         box-sizing: border-box; }
       .row.gtr-uniform > * > :last-child {
-        margin-bottom: 0; }
+        margin-bottom: 20; }
       .row.aln-left {
         justify-content: flex-start; }
       .row.aln-center {
@@ -610,7 +610,7 @@ hr {
       .row > * {
         box-sizing: border-box; }
       .row.gtr-uniform > * > :last-child {
-        margin-bottom: 0; }
+        margin-bottom: 20; }
       .row.aln-left {
         justify-content: flex-start; }
       .row.aln-center {
@@ -736,7 +736,7 @@ hr {
       .row > * {
         box-sizing: border-box; }
       .row.gtr-uniform > * > :last-child {
-        margin-bottom: 0; }
+        margin-bottom: 20; }
       .row.aln-left {
         justify-content: flex-start; }
       .row.aln-center {
@@ -862,7 +862,7 @@ hr {
       .row > * {
         box-sizing: border-box; }
       .row.gtr-uniform > * > :last-child {
-        margin-bottom: 0; }
+        margin-bottom: 20; }
       .row.aln-left {
         justify-content: flex-start; }
       .row.aln-center {
