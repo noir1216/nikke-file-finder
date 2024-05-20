@@ -35,9 +35,9 @@
 											<option value="Cover">Cover</option>
 											<option value="Standing(Lobby)">Standing(Lobby)</option>
 											<option value="FullBody(Sprite)">FullBody(Sprite)</option>
-											<option value="Portrait">Portrait</option>
+											<option value="Portrait(Icon)">Portrait(Icon)</option>
 											<option value="Burst(Lobby)">Burst(Lobby)</option>
-											<option value="Burst(InGame)">Burst(InGame)</option>
+											<option value="Burst(Battle)">Burst(Battle)</option>
 											<option value="SD-Model">SD-Model</option>
 											<option value="Voice">Voice</option>
 											<option value="Voice(MaxBond)">Voice(MaxBond)</option>
@@ -66,12 +66,12 @@
 										<label for="checkboxStanding(Lobby)">Standing(Lobby)</label>
 										<input type="checkbox" id="checkboxFullBody(Sprite)" checked>
 										<label for="checkboxFullBody(Sprite)">FullBody(Sprite)</label>
-										<input type="checkbox" id="checkboxPortrait" checked>
-										<label for="checkboxPortrait">Portrait</label>
+										<input type="checkbox" id="checkboxPortrait(Icon)" checked>
+										<label for="checkboxPortrait(Icon)">Portrait(Icon)</label>
 										<input type="checkbox" id="checkboxBurst(Lobby)" checked>
 										<label for="checkboxBurst(Lobby)">Burst(Lobby)</label>
-										<input type="checkbox" id="checkboxBurst(InGame)" checked>
-										<label for="checkboxBurst(InGame)">Burst(InGame)</label>
+										<input type="checkbox" id="checkboxBurst(Battle)" checked>
+										<label for="checkboxBurst(Battle)">Burst(Battle)</label>
 										<input type="checkbox" id="checkboxSD-Model" checked>
 										<label for="checkboxSD-Model">SD-Model</label>
 										<input type="checkbox" id="checkboxVoice" checked>
@@ -138,9 +138,9 @@
 						Cover: /spinecombatcharactergroup\(hd\)_assets_spine\/combat\/(\w+)\/(\w+)\/cover_hd_(\w+)\.bundle/g,
 						'Standing(Lobby)': /spinestandingcharactergroup\(hd\)_assets_spine\/standing\/(\w+)\/(\w+)_hd_(\w+)\.bundle/g,
 						'FullBody(Sprite)': /icons-char-full\(hd\)_assets_(\w+)_(\w+)_(\w+)\.bundle/g,
-						Portrait: /icons-char-mi\(hd\)_assets_mi_(\w+)_(\w+)_s_(\w+)\.bundle/g,
+						'Portrait(Icon)': /icons-char-mi\(hd\)_assets_mi_(\w+)_(\w+)_s_(\w+)\.bundle/g,
 						'Burst(Lobby)': /livewallpaperprefabs_assets_livewallpaper\/eventscene_(\w+)_cutscene_(\w+)\.bundle/g,
-						'Burst(InGame)': /spotskillcutscene_assets_(\w+)_cut_scene_(\w+)\.bundle/g,
+						'Burst(Battle)': /spotskillcutscene_assets_(\w+)_cut_scene_(\w+)\.bundle/g,
 						'SD-Model' : /sdcharacters_assets_(\w+)_(\w+)_var_(\w+)\.bundle/g,
 						Voice: /voice_required_pc_(\w+)_assets_all_(\w+)\.bundle/g,
 						'Voice(MaxBond)': /voice_add_pc_(\w+)_assets_all_(\w+)\.bundle/g,
@@ -329,7 +329,7 @@
 							while ((matches = regex.exec(text)) !== null) {
 								let tchar, char, variant, bundle;
 		
-								if (key === "Burst(Lobby)" || key === "Burst(InGame)" || key === "Voice" || key === "Voice(MaxBond)" || key === "Voice(Title)") {
+								if (key === "Burst(Lobby)" || key === "Burst(Battle)" || key === "Voice" || key === "Voice(MaxBond)" || key === "Voice(Title)") {
 									tchar = matches[1];
 									char = getFirstPartOfChar(tchar);
 									variant = getVariantFromChar(tchar);
@@ -376,7 +376,7 @@
 						while ((matches = regex.exec(text)) !== null) {
 							let tchar, char, variant, bundle;
 		
-							if (selector === "Burst(Lobby)" || selector === "Burst(InGame)" || selector === "Voice" || selector === "Voice(MaxBond)" || selector === "Voice(Title)") {
+							if (selector === "Burst(Lobby)" || selector === "Burst(Battle)" || selector === "Voice" || selector === "Voice(MaxBond)" || selector === "Voice(Title)") {
 								tchar = matches[1];
 								char = getFirstPartOfChar(tchar);
 								variant = getVariantFromChar(tchar);
