@@ -14,6 +14,7 @@
 									<a href="index.html" class="logo"><strong>Nikke File Finder</strong> by A1teri</a>
 									<ul class="icons">
 										<li><a href="#menu" class="icon fa-question-circle"> HOW TO USE</a></li>
+										<li><a href="#menu2" class="icon fa-question-circle"> ID'S</a></li>
 									</ul>
 								</header>
 
@@ -125,7 +126,19 @@
 							</ol>
 							This will ensure you only have the latest version of the files preventing duplicates and errors while using the tool.
 						</p>
-
+					</nav>
+					<nav id="menu2">
+						<h4>Nikke ID's</h4>
+						<table id="charactersTable">
+							<thead>
+								<tr>
+									<th style="color:white; padding: 0 0.25em 0em 0.25em;">ID</th>
+									<th style="color:white; padding: 0 0.25em 0em 0.25em;">Name</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
 					</nav>
 			</div>
 			
@@ -149,6 +162,31 @@
 
 				document.getElementById('uploadFile').addEventListener('click', function() {document.getElementById('fileInput').click();});
 				document.getElementById('uploadFolder').addEventListener('click', function() {document.getElementById('folderInput').click();});
+				document.addEventListener('DOMContentLoaded', fetchData);
+
+				function fetchData() {
+					fetch('https://api.dotgg.gg/nikke/characters/id')
+						.then(response => response.json())
+						.then(data => {
+							displayData(data);
+						})
+				}
+
+				function displayData(data) {
+					const tableBody = document.querySelector('#charactersTable tbody');
+					tableBody.innerHTML = ''; 
+
+					for (const id in data) {
+						if (data.hasOwnProperty(id)) {
+							const row = document.createElement('tr');
+							row.innerHTML = `
+								<td>${id}</td>
+								<td>${data[id]}</td>
+							`;
+							tableBody.appendChild(row);
+						}
+					}
+				}
 		
 				function readFile(input) {
 					const file = input.files[0];
