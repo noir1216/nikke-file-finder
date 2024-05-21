@@ -42,4 +42,18 @@
 				side: 'right'
 			});
 
+		$('#menu2')
+			.append('<a href="#menu2" class="close"></a>')
+			.appendTo($body)
+			.panel({
+				target: $body,
+				visibleClass: 'is-menu2-visible',
+				delay: 500,
+				hideOnClick: true,
+				hideOnSwipe: true,
+				resetScroll: true,
+				resetForms: true,
+				side: 'right'
+			});	
+
 })(jQuery);
