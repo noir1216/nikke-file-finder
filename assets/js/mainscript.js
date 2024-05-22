@@ -20,11 +20,18 @@ document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {checkbo
 document.addEventListener('DOMContentLoaded', fetchData);
 
 //Fetch Nikke ID's
+let nikkeNameID = {};
 function fetchData() {
 	fetch('https://api.dotgg.gg/nikke/characters/id')
 		.then(response => response.json())
 		.then(data => {
 			displayData(data);
+			const processedData = {};
+            for (const [id, name] of Object.entries(data)) {
+                const paddedId = id < 100 ? `0${id}` : id;
+                processedData[paddedId] = name;
+            }
+            nikkeNameID = processedData;
 		})
 }
 
@@ -113,21 +120,79 @@ function readFolder(input) {
 
 //Search Function
 function applyFilter() {
-	const idFilter = document.getElementById("idFilter").value.trim().toLowerCase();
-	const resultTables = document.querySelectorAll(".table-container table");
-	resultTables.forEach(table => {
-		const tableBody = table.querySelector("tbody");
-		const rows = tableBody.querySelectorAll("tr");
-		rows.forEach(row => {
-			const idColumn = row.querySelector("td:first-child");
-			const idValue = idColumn.textContent.toLowerCase();
-			if (idValue.includes(idFilter)) {
-				row.style.display = "";
-			} else {
-				row.style.display = "none";
-			}
-		});
-	});
+    const idFilter = document.getElementById("idFilter").value.trim().toLowerCase();
+    let idsToSearch = new Set();
+
+    for (const [id, name] of Object.entries(nikkeNameID)) {
+        if (id.includes(idFilter) || name.toLowerCase().includes(idFilter)) {
+            idsToSearch.add(id);
+        }
+    }
+
+    idsToSearch.forEach(idToSearch => {
+        console.log(`Searching for ID or name: ${idToSearch}`);
+    });
+
+    const resultTables = document.querySelectorAll(".table-container table");
+    resultTables.forEach(table => {
+        const tableBody = table.querySelector("tbody");
+        const rows = tableBody.querySelectorAll("tr");
+        rows.forEach(row => {
+            const idColumn = row.querySelector("td:first-child");
+            const idValue = idColumn.textContent.toLowerCase();
+            if ([...idsToSearch].some(idToSearch => idValue.includes(idToSearch) || idValue.includes(idFilter))) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+    showFilteredResultsPopup([...idsToSearch]);
+}
+
+//Filtered Result Popup
+function showFilteredResultsPopup(filteredIds) {
+    const existingPopup = document.getElementById("filteredResultsPopup");
+    if (existingPopup) {
+        existingPopup.remove();
+    }
+    const popup = document.createElement("div");
+    popup.id = "filteredResultsPopup";
+    popup.classList.add("filtered-results-popup");
+    const popupHeader = document.createElement("div");
+    popupHeader.classList.add("filtered-results-header");
+    const popupTitle = document.createElement("h3");
+    popupTitle.classList.add("filtered-results-title");
+    popupTitle.textContent = `"${document.getElementById("idFilter").value}"`;
+    const closeButton = document.createElement("button");
+    closeButton.classList.add("filtered-results-close-button");
+    closeButton.textContent = "X";
+    closeButton.onclick = closeFilteredResultsPopup;
+    popupHeader.appendChild(popupTitle);
+    popupHeader.appendChild(closeButton);
+    popup.appendChild(popupHeader);
+
+    const popupContent = document.createElement("div");
+    popupContent.classList.add("filtered-results-content");
+
+    const resultList = document.createElement("ul");
+    resultList.classList.add("filtered-results-list");
+    filteredIds.forEach(id => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${id}: ${nikkeNameID[id]}`;
+        resultList.appendChild(listItem);
+    });
+
+    popupContent.appendChild(resultList);
+    popup.appendChild(popupContent);
+    document.body.appendChild(popup);
+}
+
+function closeFilteredResultsPopup() {
+    const popup = document.getElementById("filteredResultsPopup");
+    if (popup) {
+        popup.remove();
+    }
 }
 
 function clearFilter() {
@@ -140,6 +205,7 @@ function clearFilter() {
 		});
 	});
 	document.getElementById("idFilter").value = "";
+	closeFilteredResultsPopup();
 }
 
 //Export Function
