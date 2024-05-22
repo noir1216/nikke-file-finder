@@ -7,3 +7,4 @@ You can use this to search for:
 - Portrait (Full/Medium/Small) 
 - SD-Model
 - Voice (Default/Max Bond/Title)
+- Background
