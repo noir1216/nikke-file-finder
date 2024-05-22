@@ -1864,3 +1864,53 @@ body.is-menu2-visible #menu2 {
   box-shadow: 0 0 1.5rem 0 rgba(0, 0, 0, 0.2);
   visibility: visible; }
 
+/* Filter Popup */
+.filtered-results-popup {
+  width: 250px;
+  max-height: 30%;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: 1000;
+  right: 13px;
+  top: 5%;
+}
+
+.filtered-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.filtered-results-title {
+  margin: 0;
+  font-size: 16px;
+  flex: 1;
+}
+
+.filtered-results-close-button {
+  margin-left: 5px;
+}
+
+.filtered-results-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.filtered-results-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.filtered-results-list li {
+  margin-bottom: 5px;
+}
