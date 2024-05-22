@@ -13,11 +13,12 @@ const regexPatterns = {
 	'Voice(Title)': /voice_required_titlecall_assets_(\w+)_titlecall_1_(\w+)\.bundle/g,
 	Background: /scenariobackground\(hd\)_assets_(\w+)_(\w+).bundle/g,
 };
-
+var applybtn = document.getElementById("applybtn");
 document.getElementById('uploadFile').addEventListener('click', function() {document.getElementById('fileInput').click();});
 document.getElementById('uploadFolder').addEventListener('click', function() {document.getElementById('folderInput').click();});
 document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {checkbox.addEventListener('change', updateTableVisibility);});
 document.addEventListener('DOMContentLoaded', fetchData);
+document.addEventListener("keypress", function(event) {if (event.keyCode === 13) {applybtn.click();}});
 
 //Fetch Nikke ID's
 let nikkeNameID = {};
