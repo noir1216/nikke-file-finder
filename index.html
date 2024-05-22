@@ -34,15 +34,16 @@
 											<option value="All">All</option>
 											<option value="Aim">Aim</option>
 											<option value="Cover">Cover</option>
-											<option value="Standing(Lobby)">Standing(Lobby)</option>
-											<option value="FullBody(Sprite)">FullBody(Sprite)</option>
-											<option value="Portrait(Icon)">Portrait(Icon)</option>
+											<option value="Standing">Standing</option>
+											<option value="Portrait(Full)">Portrait(Full)</option>
+											<option value="Potrait(Medium)">Potrait(Medium)</option>
 											<option value="Burst(Lobby)">Burst(Lobby)</option>
 											<option value="Burst(Battle)">Burst(Battle)</option>
 											<option value="SD-Model">SD-Model</option>
 											<option value="Voice">Voice</option>
 											<option value="Voice(MaxBond)">Voice(MaxBond)</option>
-											<option value="Voice(Title)">Voice(Title)</option>											
+											<option value="Voice(Title)">Voice(Title)</option>		
+											<option value="Background">Background</option>										
 											<option value="None" selected>None</option>
 										</select>
 									</div>
@@ -58,17 +59,20 @@
 									<div class="col-4-small">
 										<button onclick="clearFilter()">Clear Filter</button>
 									</div>
+									<div class="col-8-small">
+										<input type="text" id="textArea2" readonly style="width: 150%;" placeholder="Small Icons Bundle File"></input>
+									</div>
 									<div class="col-12" id="checkboxGroup" style="visibility: hidden;">
 										<input type="checkbox" id="checkboxAim" checked>
 										<label for="checkboxAim">Aim</label>
 										<input type="checkbox" id="checkboxCover" checked>
 										<label for="checkboxCover">Cover</label>
-										<input type="checkbox" id="checkboxStanding(Lobby)" checked>
-										<label for="checkboxStanding(Lobby)">Standing(Lobby)</label>
-										<input type="checkbox" id="checkboxFullBody(Sprite)" checked>
-										<label for="checkboxFullBody(Sprite)">FullBody(Sprite)</label>
-										<input type="checkbox" id="checkboxPortrait(Icon)" checked>
-										<label for="checkboxPortrait(Icon)">Portrait(Icon)</label>
+										<input type="checkbox" id="checkboxStanding" checked>
+										<label for="checkboxStanding">Standing</label>
+										<input type="checkbox" id="checkboxPortrait(Full)" checked>
+										<label for="checkboxPortrait(Full)">Portrait(Full)</label>
+										<input type="checkbox" id="checkboxPotrait(Medium)" checked>
+										<label for="checkboxPotrait(Medium)">Potrait(Medium)</label>
 										<input type="checkbox" id="checkboxBurst(Lobby)" checked>
 										<label for="checkboxBurst(Lobby)">Burst(Lobby)</label>
 										<input type="checkbox" id="checkboxBurst(Battle)" checked>
@@ -81,6 +85,8 @@
 										<label for="checkboxVoice(MaxBond)">Voice(MaxBond)</label>
 										<input type="checkbox" id="checkboxVoice(Title)" checked>
 										<label for="checkboxVoice(Title)">Voice(Title)</label>
+										<input type="checkbox" id="checkboxBackground" checked>
+										<label for="checkboxBackground">Background</label>
 									</div>
 									<br>
 										<div class="table-container" id="resultContainer"></div>
@@ -126,6 +132,7 @@
 							</ol>
 							This will ensure you only have the latest version of the files preventing duplicates and errors while using the tool.
 						</p>
+
 					</nav>
 					<nav id="menu2">
 						<h4>Nikke ID's</h4>
@@ -141,23 +148,22 @@
 						</table>
 					</nav>
 			</div>
-			
-			
 
 		<!-- Scripts -->
 			<script>
 				const regexPatterns = {
 						Aim: /spinecombatcharactergroup\(hd\)_assets_spine\/combat\/(\w+)\/(\w+)\/aim_hd_(\w+)\.bundle/g,
 						Cover: /spinecombatcharactergroup\(hd\)_assets_spine\/combat\/(\w+)\/(\w+)\/cover_hd_(\w+)\.bundle/g,
-						'Standing(Lobby)': /spinestandingcharactergroup\(hd\)_assets_spine\/standing\/(\w+)\/(\w+)_hd_(\w+)\.bundle/g,
-						'FullBody(Sprite)': /icons-char-full\(hd\)_assets_(\w+)_(\w+)_(\w+)\.bundle/g,
-						'Portrait(Icon)': /icons-char-mi\(hd\)_assets_mi_(\w+)_(\w+)_s_(\w+)\.bundle/g,
+						Standing: /spinestandingcharactergroup\(hd\)_assets_spine\/standing\/(\w+)\/(\w+)_hd_(\w+)\.bundle/g,
+						'Portrait(Full)': /icons-char-full\(hd\)_assets_(\w+)_(\w+)_(\w+)\.bundle/g,
+						'Portrait(Medium)': /icons-char-mi\(hd\)_assets_mi_(\w+)_(\w+)_s_(\w+)\.bundle/g,
 						'Burst(Lobby)': /livewallpaperprefabs_assets_livewallpaper\/eventscene_(\w+)_cutscene_(\w+)\.bundle/g,
 						'Burst(Battle)': /spotskillcutscene_assets_(\w+)_cut_scene_(\w+)\.bundle/g,
 						'SD-Model' : /sdcharacters_assets_(\w+)_(\w+)_var_(\w+)\.bundle/g,
 						Voice: /voice_required_pc_(\w+)_assets_all_(\w+)\.bundle/g,
 						'Voice(MaxBond)': /voice_add_pc_(\w+)_assets_all_(\w+)\.bundle/g,
 						'Voice(Title)': /voice_required_titlecall_assets_(\w+)_titlecall_1_(\w+)\.bundle/g,
+						Background: /scenariobackground\(hd\)_assets_(\w+)_(\w+).bundle/g,
 					};
 
 				document.getElementById('uploadFile').addEventListener('click', function() {document.getElementById('fileInput').click();});
@@ -196,6 +202,13 @@
 						reader.onload = function (e) {
 							let fileContent = e.target.result;
 							const matchedStrings = [];
+							const matchIcon = fileContent.match(/icons-char-si\(hd\)_assets_all_(\w+)\.bundle/);
+
+							if (matchIcon) {
+								let word = matchIcon[1];
+								document.getElementById("textArea2").value = word;
+							}
+						
 							for (const key in regexPatterns) {
 								const regex = regexPatterns[key];
 								let match;
@@ -224,6 +237,13 @@
 								reader.onload = function (e) {
 									const fileContent = e.target.result;
 									const matchedStrings = [];
+									const matchIcon = fileContent.match(/icons-char-si\(hd\)_assets_all_(\w+)\.bundle/);
+
+									if (matchIcon) {
+										let word = matchIcon[1];
+										document.getElementById("textArea2").value = word;
+									}
+
 									for (const key in regexPatterns) {
 										const regex = regexPatterns[key];
 										let match;
@@ -356,9 +376,13 @@
 						for (const key in regexPatterns) {
 							const regex = regexPatterns[key];
 							const resultTable = document.createElement("table");
-							resultTable.innerHTML = `<thead><tr><th>ID</th><th>Ver</th><th>File</th></tr></thead><tbody></tbody>`;
+							if (key === "Background"){
+									resultTable.innerHTML = `<thead><tr><th>ID</th><th>File</th></tr></thead><tbody></tbody>`;
+							} else {
+									resultTable.innerHTML = `<thead><tr><th>ID</th><th>Ver</th><th>File</th></tr></thead><tbody></tbody>`;
+							}
 							resultContainer.appendChild(resultTable);
-		
+
 							const resultBody = resultTable.querySelector("tbody");
 		
 							let matches;
@@ -372,12 +396,20 @@
 									char = getFirstPartOfChar(tchar);
 									variant = getVariantFromChar(tchar);
 									bundle = matches[2];
+								} else if (key === "Background"){
+									char = matches[1];
+									bundle = matches[2];
 								} else {
 									char = matches[1];
 									variant = matches[2];
 									bundle = matches[3];
 								}
-								rowsHtml += `<tr><td>${char}</td><td>${variant}</td><td>${bundle}</td></tr>`;
+
+								if (key === "Background"){
+									rowsHtml += `<tr><td>${char}</td><td>${bundle}</td></tr>`;
+								} else {
+									rowsHtml += `<tr><td>${char}</td><td>${variant}</td><td>${bundle}</td></tr>`;
+								}
 							}
 		
 							const sortedRows = rowsHtml.split('</tr>')
@@ -402,7 +434,11 @@
 					} else if (selector !== "None") {
 						const regex = regexPatterns[selector];
 						const resultTable = document.createElement("table");
-						resultTable.innerHTML = `<thead><tr><th>ID</th><th>Ver</th><th>File</th></tr></thead><tbody></tbody>`;
+						if (selector === "Background"){
+							resultTable.innerHTML = `<thead><tr><th>ID</th><th>File</th></tr></thead><tbody></tbody>`;
+						} else {
+							resultTable.innerHTML = `<thead><tr><th>ID</th><th>Ver</th><th>File</th></tr></thead><tbody></tbody>`;
+						}
 						resultContainer.innerHTML = "";
 						resultContainer.appendChild(resultTable);
 		
@@ -419,12 +455,19 @@
 								char = getFirstPartOfChar(tchar);
 								variant = getVariantFromChar(tchar);
 								bundle = matches[2];
+							} else if (selector === "Background"){
+								char = matches[1];
+								bundle = matches[2];
 							} else {
 								char = matches[1];
 								variant = matches[2];
 								bundle = matches[3];
 							}
-							rowsHtml += `<tr><td>${char}</td><td>${variant}</td><td>${bundle}</td></tr>`;
+							if (selector === "Background"){
+								rowsHtml += `<tr><td>${char}</td><td>${bundle}</td></tr>`;
+							} else {
+								rowsHtml += `<tr><td>${char}</td><td>${variant}</td><td>${bundle}</td></tr>`;
+							}
 						}
 		
 						const sortedRows = rowsHtml.split('</tr>')
@@ -451,7 +494,6 @@
 					highlightRows();
 				}
 		
-		
 				function getVariantFromChar(tchar) {
 					return tchar.includes("_") ? tchar.split("_")[1] : "00";
 				}
@@ -463,68 +505,87 @@
 		
 				function highlightRows() {
 				const resultTables = document.querySelectorAll(".table-container table");
-		
+
 				resultTables.forEach(table => {
 					const tableBody = table.querySelector("tbody");
 					const rows = tableBody.querySelectorAll("tr");
-		
+
 					let idRowsMap = new Map();
-		
+
 					rows.forEach(row => {
 						const firstColumn = row.querySelector("td:first-child");
-						const id = firstColumn.textContent.trim();
-		
+						const id = firstColumn ? firstColumn.textContent.trim() : '';
+
 						if (!idRowsMap.has(id)) {
 							idRowsMap.set(id, []);
 						}
-		
+
 						idRowsMap.get(id).push(row);
 					});
-		
+
 					idRowsMap.forEach(idRows => {
 						let groupStarted = false;
-		
+						const columnCount = idRows[0].querySelectorAll("td").length;
+
 						idRows.forEach((row, index) => {
 							const secondColumn = row.querySelector("td:nth-child(2)");
 							const thirdColumn = row.querySelector("td:nth-child(3)");
-		
-							const isSecondColumnExceeded = secondColumn.textContent.length > 2;
-							const isThirdColumnExceeded = thirdColumn.textContent.length > 32;
-		
+
+							const isSecondColumnExceeded = secondColumn ? secondColumn.textContent.length > 2 : false;
+							const isThirdColumnExceeded = thirdColumn ? thirdColumn.textContent.length > 32 : false;
+
 							if (!groupStarted) {
 								row.style.borderTop = "2px solid black";
 								groupStarted = true;
 							} else {
 								row.style.borderTop = "none";
 							}
-		
-							if (isSecondColumnExceeded || isThirdColumnExceeded) {
+
+							// Only apply lightcoral background if the table has more than 2 columns
+							if (columnCount > 2 && (isSecondColumnExceeded || isThirdColumnExceeded)) {
 								row.style.backgroundColor = "lightcoral";
 							} else {
 								row.style.backgroundColor = "";
 							}
-		
+
 							const lastColumn = row.querySelector("td:last-child");
-							lastColumn.style.borderRight = "2px solid black";
-		
-							row.querySelector("td:first-child").style.borderLeft = "2px solid black";
+							if (lastColumn) {
+								lastColumn.style.borderRight = "2px solid black";
+							}
+
+							const firstColumn = row.querySelector("td:first-child");
+							if (firstColumn) {
+								firstColumn.style.borderLeft = "2px solid black";
+							}
 						});
-		
+
 						if (groupStarted) {
 							const lastRow = idRows[idRows.length - 1];
 							lastRow.style.borderBottom = "2px solid black";
-							lastRow.querySelector("td:last-child").style.borderRight = "2px solid black";
+							const lastColumn = lastRow.querySelector("td:last-child");
+							if (lastColumn) {
+								lastColumn.style.borderRight = "2px solid black";
+							}
 						}
 					});
-		
+
 					const headerRow = table.querySelector("thead tr");
-					headerRow.style.borderTop = "2px solid black";
-					headerRow.style.borderBottom = "2px solid black";
-					headerRow.style.borderLeft = "2px solid black";
-					headerRow.querySelector("th:first-child").style.borderLeft = "2px solid black";
-					headerRow.querySelector("th:last-child").style.borderRight = "2px solid black";
+					if (headerRow) {
+						headerRow.style.borderTop = "2px solid black";
+						headerRow.style.borderBottom = "2px solid black";
+						const firstHeader = headerRow.querySelector("th:first-child");
+						if (firstHeader) {
+							firstHeader.style.borderLeft = "2px solid black";
+						}
+						const lastHeader = headerRow.querySelector("th:last-child");
+						if (lastHeader) {
+							lastHeader.style.borderRight = "2px solid black";
+						}
+					}
 				});
 			}
+
+
 			</script>
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/browser.min.js"></script>
