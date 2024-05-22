@@ -167,17 +167,16 @@ function showFilteredResultsPopup(filteredIds) {
     popupHeader.appendChild(popupTitle);
     popupHeader.appendChild(closeButton);
     popup.appendChild(popupHeader);
-
     const popupContent = document.createElement("div");
     popupContent.classList.add("filtered-results-content");
-
     const resultList = document.createElement("ul");
     resultList.classList.add("filtered-results-list");
-    filteredIds.forEach(id => {
-        const listItem = document.createElement("li");
-        listItem.textContent = `${id}: ${nikkeNameID[id]}`;
-        resultList.appendChild(listItem);
-    });
+    filteredIds.sort((a, b) => a - b);
+	filteredIds.forEach(id => {
+		const listItem = document.createElement("li");
+		listItem.textContent = `${id}: ${nikkeNameID[id]}`;
+		resultList.appendChild(listItem);
+	});
 
     popupContent.appendChild(resultList);
     popup.appendChild(popupContent);
