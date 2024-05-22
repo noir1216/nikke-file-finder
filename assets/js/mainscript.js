@@ -129,10 +129,6 @@ function applyFilter() {
         }
     }
 
-    idsToSearch.forEach(idToSearch => {
-        console.log(`Searching for ID or name: ${idToSearch}`);
-    });
-
     const resultTables = document.querySelectorAll(".table-container table");
     resultTables.forEach(table => {
         const tableBody = table.querySelector("tbody");
