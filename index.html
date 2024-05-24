@@ -50,25 +50,7 @@
 		</div>
 	</div>
 
-<script>
-	function loadPage(page) {
-        document.getElementById('maincontent').src = page;
-    }
-
-	function handleClick(clickedId, pageName) {
-        document.querySelectorAll('.topnav a').forEach(link => {
-            link.classList.remove('active');
-        });
-        document.getElementById(clickedId).classList.add('active');
-        loadPage(pageName);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        handleClick('fileFinderLink', 'file-finder.html');
-    });
-
-</script>
-<script src="assets/js/mainscript.js"></script>
+		<script src="assets/js/mainscript.js"></script>
 		<script src="assets/js/jquery.min.js"></script>
 		<script src="assets/js/browser.min.js"></script>
 		<script src="assets/js/breakpoints.min.js"></script>
