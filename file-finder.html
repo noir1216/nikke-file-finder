@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Nikke File Finder</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+		<div id="wrapper">
+			<div id="main">
+				<div class="inner">
+						<header id="header">
+							<a class="logo"><strong>Nikke File Finder</strong> by A1teri</a>
+							<ul class="icons">
+								<li><a href="#menu2" class="icon fa-user-circle"> Character ID'S</a></li>
+							</ul>
+						</header>
+						<section>
+							<div class="content">
+								<ul class="actions">
+									<li><a href="#" class="button primary icon solid fa-file" id="uploadFile">Upload File</a> <a href="#" class="button primary icon solid fa-folder" id="uploadFolder">Upload Folder</a></li>
+									<input type="file" id="fileInput" accept=".txt, .json" onchange="readFile(this)" style="display: none;">
+									<input type="file" id="folderInput" webkitdirectory directory multiple onchange="readFolder(this)" style="display: none;">
+								</ul>
+								<textarea id="textArea" style="resize: none;" readonly rows="5" cols="120" oninput="updateSelectorState()">Upload File or Folder</textarea>
+							</div>
+						</section>
+						<div class="row gtr-uniform">
+							<div class="col-5-small">
+								<select  id="selector" disabled onchange="updateSelectorState()">
+									<option value="All" selected>All</option>
+									<option value="Aim">Aim</option>
+									<option value="Cover">Cover</option>
+									<option value="Standing">Standing</option>
+									<option value="Portrait(Full)">Portrait(Full)</option>
+									<option value="Portrait(Medium)">Portrait(Medium)</option>
+									<option value="Burst(Lobby)">Burst(Lobby)</option>
+									<option value="Burst(Battle)">Burst(Battle)</option>
+									<option value="SD-Model">SD-Model</option>
+									<option value="Voice">Voice</option>
+									<option value="Voice(MaxBond)">Voice(MaxBond)</option>
+									<option value="Voice(Title)">Voice(Title)</option>		
+									<option value="Background">Background</option>										
+									<option value="None" >None</option>
+								</select>
+							</div>
+							<div class="col-4-small">
+								<button id="exportButton" onclick="exportTable()" disabled>Export Table</button>
+							</div>
+							<div class="col-5-small">
+								<input type="text" id="idFilter" placeholder="Filter by Name or ID">
+							</div>
+							<div class="col-4-small">
+								<button id="applybtn" onclick="applyFilter()">Apply Filter</button>
+							</div>
+							<div class="col-4-small">
+								<button onclick="clearFilter()">Clear Filter</button>
+							</div>
+							<div class="col-8-small">
+								<input type="text" id="textArea2" readonly style="width: 150%;" placeholder="Portrait(Small) Bundle File"></input>
+							</div>
+							<div class="col-12" id="checkboxGroup">
+								<input type="checkbox" id="checkboxAim" checked>
+								<label for="checkboxAim">Aim</label>
+								<input type="checkbox" id="checkboxCover" checked>
+								<label for="checkboxCover">Cover</label>
+								<input type="checkbox" id="checkboxStanding" checked>
+								<label for="checkboxStanding">Standing</label>
+								<input type="checkbox" id="checkboxPortrait(Full)" checked>
+								<label for="checkboxPortrait(Full)">Portrait(Full)</label>
+								<input type="checkbox" id="checkboxPortrait(Medium)" checked>
+								<label for="checkboxPortrait(Medium)">Portrait(Medium)</label>
+								<input type="checkbox" id="checkboxBurst(Lobby)" checked>
+								<label for="checkboxBurst(Lobby)">Burst(Lobby)</label>
+								<input type="checkbox" id="checkboxBurst(Battle)" checked>
+								<label for="checkboxBurst(Battle)">Burst(Battle)</label>
+								<input type="checkbox" id="checkboxSD-Model" checked>
+								<label for="checkboxSD-Model">SD-Model</label>
+								<input type="checkbox" id="checkboxVoice" checked>
+								<label for="checkboxVoice">Voice</label>
+								<input type="checkbox" id="checkboxVoice(MaxBond)" checked>
+								<label for="checkboxVoice(MaxBond)">Voice(MaxBond)</label>
+								<input type="checkbox" id="checkboxVoice(Title)" checked>
+								<label for="checkboxVoice(Title)">Voice(Title)</label>
+								<input type="checkbox" id="checkboxBackground" checked>
+								<label for="checkboxBackground">Background</label>
+							</div>
+							<br>
+							<div class="table-container table-container-scroll" id="resultContainer"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<nav id="menu2">
+				<h4>Nikke ID's</h4>
+				
+				<table id="charactersTable">
+					<thead>
+						<tr>
+							<th style="color:white;">ID</th>
+							<th style="color:white;">Name</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</nav>
+
+		</div>
+
+		<!-- Scripts -->
+		<script src="assets/js/file-script.js"></script>
+		<script src="assets/js/mainscript.js"></script>
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+	</body>
+</html>

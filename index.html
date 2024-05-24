@@ -1,100 +1,21 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<title>Nikke File Finder</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
-		<link rel="stylesheet" href="assets/css/main.css" />
-	</head>
-	<body class="is-preload">
-		<div id="wrapper">
-			<div id="main">
-				<div class="inner">
-						<header id="header">
-							<a href="index.html" class="logo"><strong>Nikke File Finder</strong> by A1teri</a>
-							<ul class="icons">
-								<li><a href="#menu" class="icon fa-question-circle"> HOW TO USE</a></li>
-								<li><a href="#menu2" class="icon fa-user-circle"> ID'S</a></li>
-							</ul>
-						</header>
-						<section>
-							<div class="content">
-								<ul class="actions">
-									<li><a href="#" class="button primary icon solid fa-file" id="uploadFile">Upload File</a> <a href="#" class="button primary icon solid fa-folder" id="uploadFolder">Upload Folder</a></li>
-									<input type="file" id="fileInput" accept=".txt, .json" onchange="readFile(this)" style="display: none;">
-									<input type="file" id="folderInput" webkitdirectory directory multiple onchange="readFolder(this)" style="display: none;">
-								</ul>
-								<textarea id="textArea" style="resize: none;" readonly rows="5" cols="120" oninput="updateSelectorState()">Upload File or Folder</textarea>
-							</div>
-						</section>
-						<div class="row gtr-uniform">
-							<div class="col-5-small">
-								<select  id="selector" disabled onchange="updateSelectorState()">
-									<option value="All">All</option>
-									<option value="Aim">Aim</option>
-									<option value="Cover">Cover</option>
-									<option value="Standing">Standing</option>
-									<option value="Portrait(Full)">Portrait(Full)</option>
-									<option value="Portrait(Medium)">Portrait(Medium)</option>
-									<option value="Burst(Lobby)">Burst(Lobby)</option>
-									<option value="Burst(Battle)">Burst(Battle)</option>
-									<option value="SD-Model">SD-Model</option>
-									<option value="Voice">Voice</option>
-									<option value="Voice(MaxBond)">Voice(MaxBond)</option>
-									<option value="Voice(Title)">Voice(Title)</option>		
-									<option value="Background">Background</option>										
-									<option value="None" selected>None</option>
-								</select>
-							</div>
-							<div class="col-4-small">
-								<button id="exportButton" onclick="exportTable()" disabled>Export Table</button>
-							</div>
-							<div class="col-5-small">
-								<input type="text" id="idFilter" placeholder="Filter by Name or ID">
-							</div>
-							<div class="col-4-small">
-								<button id="applybtn" onclick="applyFilter()">Apply Filter</button>
-							</div>
-							<div class="col-4-small">
-								<button onclick="clearFilter()">Clear Filter</button>
-							</div>
-							<div class="col-8-small">
-								<input type="text" id="textArea2" readonly style="width: 150%;" placeholder="Portrait(Small) Bundle File"></input>
-							</div>
-							<div class="col-12" id="checkboxGroup" style="visibility: hidden;">
-								<input type="checkbox" id="checkboxAim" checked>
-								<label for="checkboxAim">Aim</label>
-								<input type="checkbox" id="checkboxCover" checked>
-								<label for="checkboxCover">Cover</label>
-								<input type="checkbox" id="checkboxStanding" checked>
-								<label for="checkboxStanding">Standing</label>
-								<input type="checkbox" id="checkboxPortrait(Full)" checked>
-								<label for="checkboxPortrait(Full)">Portrait(Full)</label>
-								<input type="checkbox" id="checkboxPortrait(Medium)" checked>
-								<label for="checkboxPortrait(Medium)">Portrait(Medium)</label>
-								<input type="checkbox" id="checkboxBurst(Lobby)" checked>
-								<label for="checkboxBurst(Lobby)">Burst(Lobby)</label>
-								<input type="checkbox" id="checkboxBurst(Battle)" checked>
-								<label for="checkboxBurst(Battle)">Burst(Battle)</label>
-								<input type="checkbox" id="checkboxSD-Model" checked>
-								<label for="checkboxSD-Model">SD-Model</label>
-								<input type="checkbox" id="checkboxVoice" checked>
-								<label for="checkboxVoice">Voice</label>
-								<input type="checkbox" id="checkboxVoice(MaxBond)" checked>
-								<label for="checkboxVoice(MaxBond)">Voice(MaxBond)</label>
-								<input type="checkbox" id="checkboxVoice(Title)" checked>
-								<label for="checkboxVoice(Title)">Voice(Title)</label>
-								<input type="checkbox" id="checkboxBackground" checked>
-								<label for="checkboxBackground">Background</label>
-							</div>
-							<br>
-								<div class="table-container" id="resultContainer"></div>
-						</div>
-						
-					</div>
-				</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nikke File Finder</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+	<link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body class="is-preload">
+	<div id="wrapper">
+		<div id="main">
+			<div class="topnav">
+				<a id="fileFinderLink" class="active" onclick="handleClick('fileFinderLink', 'file-finder.html')">File Finder</a>
+				<a id="physicsFinderLink" onclick="handleClick('physicsFinderLink', 'physics-finder.html')">Physics Finder</a>
+				<a href="#menu" class="split icon fa-question-circle"> HOW TO USE</a>
 			</div>
+			<iframe id="maincontent" style="width:100%; height:94vh; border:none;"></iframe>
 			<nav id="menu">
 				<h4>Instructions</h4>
 				<ol>
@@ -114,18 +35,11 @@
 				</ol>
 				<h4>Folders</h4>
 				<h5>Addressable Directory</h5>
-				<p>
-					C:\Users\<i>USERNAME</i>\AppData\LocalLow\ com_proximabeta\NIKKE\
-					com.unity.addressables
-				</p>
+					<p>C:\Users\<i>USERNAME</i>\AppData\LocalLow\ com_proximabeta\NIKKE\com.unity.addressables</p>
 				<h5>Mod Directory</h5>
-				<p>C:\Users\<i>USERNAME</i>\AppData\LocalLow\
-					Unity\com_proximabeta_NIKKE\
-					<b style="color: #f56a6a;">SEARCH-HERE</b>
-				</p>
+					<p>C:\Users\<i>USERNAME</i>\AppData\LocalLow\ Unity\com_proximabeta_NIKKE\<b style="color: #f56a6a;">SEARCH-HERE</b></p>
 				<h4>Reminders</h4>
-				<p>
-					Before uploading your <b style="color: #f56a6a;">addressable folder</b>. 
+				<p>Before uploading your <b style="color: #f56a6a;">addressable folder</b>. 
 					<ol>
 						<li>Make sure you disable all mods applied by NMM</li>
 						<li>Delete the addressable folder then run the game once</li>
@@ -133,27 +47,33 @@
 					This will ensure you only have the latest version of the files preventing duplicates and errors while using the tool.
 				</p>
 			</nav>
-			<nav id="menu2">
-				<h4>Nikke ID's</h4>
-				<table id="charactersTable">
-					<thead>
-						<tr>
-							<th style="color:white;">ID</th>
-							<th style="color:white;">Name</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</nav>
 		</div>
+	</div>
 
-		<!-- Scripts -->
-		<script src="assets/js/mainscript.js"></script>
+<script>
+	function loadPage(page) {
+        document.getElementById('maincontent').src = page;
+    }
+
+	function handleClick(clickedId, pageName) {
+        document.querySelectorAll('.topnav a').forEach(link => {
+            link.classList.remove('active');
+        });
+        document.getElementById(clickedId).classList.add('active');
+        loadPage(pageName);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        handleClick('fileFinderLink', 'file-finder.html');
+    });
+
+</script>
+<script src="assets/js/mainscript.js"></script>
 		<script src="assets/js/jquery.min.js"></script>
 		<script src="assets/js/browser.min.js"></script>
 		<script src="assets/js/breakpoints.min.js"></script>
 		<script src="assets/js/util.js"></script>
 		<script src="assets/js/main.js"></script>
-	</body>
+
+</body>
 </html>

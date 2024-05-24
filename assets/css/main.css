@@ -586,6 +586,20 @@ ul.icons {
   margin-bottom: 20px;
 }
 
+.table-container-scroll {
+  max-height: 63vh;
+  overflow-y: auto;
+  overflow-x: auto; 
+  border-top: 1px solid #ccc;
+  position: relative; 
+}
+
+.table-container-scroll::after {
+  content: '';
+  display: block;
+  height: 20px; 
+}
+
 .table-wrapper {
   -webkit-overflow-scrolling: touch;
   overflow-x: auto; }
@@ -791,12 +805,12 @@ button,
 
 /* Menu */
 #menu {
-  background-color: #464646;
+  background-color: #3d4449;
   color: rgb(255, 255, 255);
-  -moz-transform: translateX(20rem);
-  -webkit-transform: translateX(20rem);
-  -ms-transform: translateX(20rem);
-  transform: translateX(20rem);
+  -moz-transform: translateX(25rem);
+  -webkit-transform: translateX(25rem);
+  -ms-transform: translateX(25rem);
+  transform: translateX(25rem);
   -moz-transition: -moz-transform 0.5s ease, box-shadow 0.5s ease, visibility 0.5s;
   -webkit-transition: -webkit-transform 0.5s ease, box-shadow 0.5s ease, visibility 0.5s;
   -ms-transition: -ms-transform 0.5s ease, box-shadow 0.5s ease, visibility 0.5s;
@@ -811,7 +825,7 @@ button,
   right: 0;
   top: 0;
   visibility: hidden;
-  width: 20rem;
+  width: 25rem;
   z-index: 10002; }
   #menu input, #menu select, #menu textarea {
     color: #ffffff; }
@@ -925,7 +939,7 @@ body.is-menu-visible #menu {
   visibility: visible; }
 
 #menu2 {
-  background-color: #464646;
+  background-color: #3d4449;
   color: rgb(255, 255, 255);
   -moz-transform: translateX(20rem);
   -webkit-transform: translateX(20rem);
@@ -1109,4 +1123,34 @@ body.is-menu2-visible #menu2 {
   margin-bottom: 5px;
 }
 
+/* Nav bar */
+.topnav {
+  background-color: #f36b6b ;
+  overflow: hidden;
+}
 
+.topnav a {
+  float: left;
+  color: #ffffff !important;
+  text-align: center;
+  padding: 8px;
+  font-family: "Roboto Slab", serif;
+  font-size: 1.125em;
+  font-weight: 500;
+  border-bottom: none !important;
+}
+
+.topnav a:hover {
+  background-color: #f67878;
+  color: #f2f2f2 !important;
+}
+
+.topnav a.active {
+  background-color: #b64141;
+  color: #ffffff !important;
+}
+
+.topnav a.split {
+  float: right;
+  color: #ffffff !important;
+}

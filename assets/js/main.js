@@ -6,8 +6,8 @@
 (function($) {
 
 	var	$window = $(window),
-		$banner = $('#banner'),
 		$body = $('body');
+		$iframe = $('iframe')
 
 	// Breakpoints.
 		breakpoints({
