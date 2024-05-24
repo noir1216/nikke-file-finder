@@ -3,6 +3,7 @@ document.getElementById('uploadFile').addEventListener('click', function() {docu
 document.getElementById('uploadFolder').addEventListener('click', function() {document.getElementById('folderInput').click();});
 document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {checkbox.addEventListener('change', updateTableVisibility);});
 document.addEventListener('DOMContentLoaded', fetchData);
+document.addEventListener('DOMContentLoaded', function() {handleClick('fileFinderLink', 'file-finder.html');});
 document.addEventListener("keypress", function(event) {if (event.keyCode === 13) {applybtn.click();}});
 
 //Fetch Nikke ID's
@@ -35,6 +36,18 @@ function displayData(data) {
 			tableBody.appendChild(row);
 		}
 	}
+}
+
+function loadPage(page) {
+	document.getElementById('maincontent').src = page;
+}
+
+function handleClick(clickedId, pageName) {
+	document.querySelectorAll('.topnav a').forEach(link => {
+		link.classList.remove('active');
+	});
+	document.getElementById(clickedId).classList.add('active');
+	loadPage(pageName);
 }
 
 //Search Function
@@ -225,3 +238,4 @@ function highlightRows() {
 		}
 	});
 }
+
