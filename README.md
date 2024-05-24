@@ -8,3 +8,4 @@ You can use this to search for:
 - SD-Model
 - Voice (Default/Max Bond/Title)
 - Background
+- Aim/AimShooting/Cover Physics & its bundle file
