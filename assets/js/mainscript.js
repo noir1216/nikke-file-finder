@@ -121,7 +121,12 @@ function readFolder(input) {
 
 //Search Function
 function applyFilter() {
-    const idFilter = document.getElementById("idFilter").value.trim().toLowerCase();
+    let idFilter = document.getElementById("idFilter").value.trim().toLowerCase();
+
+    const match = idFilter.match(/^c(\d+)$/);
+    if (match) {
+        idFilter = match[1];
+    }
     let idsToSearch = new Set();
 
     for (const [id, name] of Object.entries(nikkeNameID)) {
@@ -144,6 +149,7 @@ function applyFilter() {
             }
         });
     });
+
     showFilteredResultsPopup([...idsToSearch]);
 }
 
