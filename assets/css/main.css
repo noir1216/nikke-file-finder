@@ -1,5 +1,5 @@
 @import url(fontawesome-all.min.css);
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,400italic,600italic|Roboto+Slab:400,700");
+@import url(font-family.css);
 
 html, body, div, h1, h2, h3, h4, h5, h6, p, pre, a, em, img, q, s,
 small, strong, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li,
@@ -588,6 +588,7 @@ ul.icons {
 
 .table-container-scroll {
   max-height: 63vh;
+  width: auto;
   overflow-y: auto;
   overflow-x: auto; 
   border-top: 1px solid #ccc;

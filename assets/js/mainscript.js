@@ -1,28 +1,9 @@
-document.addEventListener('DOMContentLoaded', function() {
-    handleClick('fileFinderLink', 'file-finder.html');
-    
-    var applybtn = document.getElementById("applybtn");
-    
-    document.getElementById('uploadFile').addEventListener('click', function() {
-        document.getElementById('fileInput').click();
-    });
-    
-    document.getElementById('uploadFolder').addEventListener('click', function() {
-        document.getElementById('folderInput').click();
-    });
-    
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', updateTableVisibility);
-    });
-    
-    fetchData();
-    
-    document.addEventListener("keypress", function(event) {
-        if (event.keyCode === 13 && applybtn) {
-            applybtn.click();
-        }
-    });
-});
+document.addEventListener('DOMContentLoaded', fetchData);
+var applybtn = document.getElementById("applybtn");
+document.getElementById('uploadFile').addEventListener('click', function() {document.getElementById('fileInput').click();});
+document.getElementById('uploadFolder').addEventListener('click', function() {document.getElementById('folderInput').click();});
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {checkbox.addEventListener('change', updateTableVisibility);});
+document.addEventListener("keypress", function(event) {if (event.keyCode === 13) {applybtn.click();}});
 
 // Fetch Nikke IDs
 let nikkeNameID = {};   
