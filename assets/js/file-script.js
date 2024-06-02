@@ -12,6 +12,7 @@ const regexPatterns = {
 	'Voice(MaxBond)': /voice_add_pc_(\w+)_assets_all_(\w+)\.bundle/g,
 	'Voice(Title)': /voice_required_titlecall_assets_(\w+)_titlecall_1_(\w+)\.bundle/g,
 	Background: /scenariobackground\(hd\)_assets_(\w+)_(\w+).bundle/g,
+	EventsWallpaper: /spineeventscenesgroup\(hd\)_assets_spine\/events\/eventscene_(\w+)_(\w+).bundle/g,
 };
 
 //File Reader
@@ -87,7 +88,7 @@ function exportTable() {
 	const resultContainer = document.getElementById("resultContainer");
 	const resultTables = resultContainer.querySelectorAll("table");
 	var exportData = "";
-	if (selector === "Background"){
+	if (selector === "Background"|| selector === "EventsWallpaper"){
 		 exportData = [["ID", "File"]];
 	} else {
 		 exportData = [["ID", "Ver", "File"]];
@@ -138,7 +139,7 @@ function analyzeText() {
 		for (const key in regexPatterns) {
 			const regex = regexPatterns[key];
 			const resultTable = document.createElement("table");
-			if (key === "Background"){
+			if (key === "Background" || key === "EventsWallpaper"){
 					resultTable.innerHTML = `<thead><tr><th>ID</th><th>File</th></tr></thead><tbody></tbody>`;
 			} else {
 					resultTable.innerHTML = `<thead><tr><th>ID</th><th>Ver</th><th>File</th></tr></thead><tbody></tbody>`;
@@ -154,7 +155,7 @@ function analyzeText() {
 					char = getFirstPartOfChar(tchar);
 					variant = getVariantFromChar(tchar);
 					bundle = matches[2];
-				} else if (key === "Background"){
+				} else if (key === "Background" || key === "EventsWallpaper"){
 					char = matches[1];
 					bundle = matches[2];
 				} else {
@@ -162,7 +163,7 @@ function analyzeText() {
 					variant = matches[2];
 					bundle = matches[3];
 				}
-			if (key === "Background"){
+			if (key === "Background" || key === "EventsWallpaper"){
 					rowsHtml += `<tr><td>${char}</td><td>${bundle}</td></tr>`;
 				} else {
 					rowsHtml += `<tr><td>${char}</td><td>${variant}</td><td>${bundle}</td></tr>`;
@@ -188,7 +189,7 @@ function analyzeText() {
 	} else if (selector !== "None") {
 		const regex = regexPatterns[selector];
 		const resultTable = document.createElement("table");
-		if (selector === "Background"){
+		if (selector === "Background" || selector === "EventsWallpaper"){
 			resultTable.innerHTML = `<thead><tr><th>ID</th><th>File</th></tr></thead><tbody></tbody>`;
 		} else {
 			resultTable.innerHTML = `<thead><tr><th>ID</th><th>Ver</th><th>File</th></tr></thead><tbody></tbody>`;
@@ -205,7 +206,7 @@ function analyzeText() {
 				char = getFirstPartOfChar(tchar);
 				variant = getVariantFromChar(tchar);
 				bundle = matches[2];
-			} else if (selector === "Background"){
+			} else if (selector === "Background" || selector === "EventsWallpaper"){
 				char = matches[1];
 				bundle = matches[2];
 			} else {
@@ -213,7 +214,7 @@ function analyzeText() {
 				variant = matches[2];
 				bundle = matches[3];
 			}
-			if (selector === "Background"){
+			if (selector === "Background" || selector === "EventsWallpaper"){
 				rowsHtml += `<tr><td>${char}</td><td>${bundle}</td></tr>`;
 			} else {
 				rowsHtml += `<tr><td>${char}</td><td>${variant}</td><td>${bundle}</td></tr>`;

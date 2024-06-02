@@ -75,7 +75,8 @@ function applyFilter() {
         rows.forEach(row => {
             const idColumn = row.querySelector("td:first-child");
             const idValue = idColumn.textContent.toLowerCase();
-            if ([...idsToSearch].some(idToSearch => idValue.includes(idToSearch) || idValue.includes(idFilter))) {
+            const isMatch = [...idsToSearch].some(idToSearch => idValue.includes(idToSearch));
+            if (isMatch || idValue.includes(idFilter)) {
                 row.style.display = "";
             } else {
                 row.style.display = "none";
@@ -85,6 +86,7 @@ function applyFilter() {
 
     showFilteredResultsPopup([...idsToSearch]);
 }
+
 
 // Filtered Result Popup
 function showFilteredResultsPopup(filteredIds) {
