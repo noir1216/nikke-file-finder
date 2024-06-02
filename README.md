@@ -1,11 +1,11 @@
 # nikke-file-finder
-You can use this to search for:
-- Aim 
-- Cover 
-- Standing
-- Burst (Lobby & Battle) 
-- Portrait (Full/Medium/Small) 
-- SD-Model
-- Voice (Default/Max Bond/Title)
-- Background
-- Aim/AimShooting/Cover Physics & its bundle file
+您可以用它来搜索:
+- 瞄准
+- 掩体
+- 站姿
+- 爆裂 (大厅 & 战斗) 
+- 肖像 (完整/中号/小号) 
+- SD模型
+- 声音 (默认/Max Bond/标题)
+- 背景
+- 瞄准/瞄准射击/掩体 物理 & 及其包文件
